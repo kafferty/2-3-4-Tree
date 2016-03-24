@@ -4,14 +4,12 @@ import java.io.InputStreamReader;
 
 public class Tree234App {
     public static void main(String[] args) throws IOException {
-        long value;
-        Tree234 theTree = new Tree234();
-
-        theTree.insert(50);
-        theTree.insert(40);
-        theTree.insert(30);
-        theTree.insert(60);
-        theTree.insert(70);
+        String value;
+        Tree234<String> theTree = new Tree234<>();
+        theTree.insert("a");
+        theTree.insert("meow");
+        theTree.insert("kuku");
+        theTree.insert("politech");
         while(true) {
             System.out.println("Enter first letter of ");
             System.out.println("show, insert or find");
@@ -23,12 +21,12 @@ public class Tree234App {
                     break;
                 case 'i':
                     System.out.print("Enter value to insert: ");
-                    value  = getInt();
+                    value  = getString();
                     theTree.insert(value);
                     break;
                 case 'f':
                     System.out.print("Enter value to find: ");
-                    value = getInt();
+                    value = getString();
                     int found = theTree.find(value);
                     if(found!=-1)
                         System.out.println("Found " + value);
