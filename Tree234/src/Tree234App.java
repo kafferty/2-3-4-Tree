@@ -7,9 +7,7 @@ public class Tree234App {
         String value;
         Tree234<String> theTree = new Tree234<>();
         theTree.insert("a");
-        theTree.insert("meow");
-        theTree.insert("kuku");
-        theTree.insert("politech");
+        theTree.insert("b");
         while(true) {
             System.out.println("Enter first letter of ");
             System.out.println("show, insert or find");

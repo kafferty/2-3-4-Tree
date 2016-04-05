@@ -1,9 +1,13 @@
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.TreeSet;
 
-public class Tree234<T extends Comparable<T>> implements Collection<T> {//Объект класса представляет все дерево. Три основных метода: удаление, вставка и поиск.
-    private Node<T> root = new Node<>();//создание корневого узла
+public class Tree234<T extends Comparable<T>> implements Collection<T>,Iterable<T> {//Объект класса представляет все дерево. Три основных метода: удаление, вставка и поиск.
+
+    private Node<T> root = new Node<T>();//создание корневого узла
     private int size = 0;
+    private Node<T> min = null;
+    private Node<T> max = null;
 
     public void split(Node<T> thisNode) //Разбиение узла
     {
@@ -15,11 +19,11 @@ public class Tree234<T extends Comparable<T>> implements Collection<T> {//Объ
         itemB = thisNode.removeItem();
         child2 = thisNode.disconnectChild(2);//Отсоединение потомков от текущего узла
         child3 = thisNode.disconnectChild(3);
-        Node<T> newRight = new Node<>();// Создание нового узла
+        Node<T> newRight = new Node<T>();// Создание нового узла
 
         if (thisNode == root)//если узел является корневым
         {
-            root = new Node<>();//Создание нового корня
+            root = new Node<T>();//Создание нового корня
             parent = root;//Корень становится родителем
             root.connectChild(0, thisNode);//Связывание с родителем
         } else
@@ -52,14 +56,13 @@ public class Tree234<T extends Comparable<T>> implements Collection<T> {//Объ
         return theNode.getChild(j);
     }
 
-    public int find(T key) {
+    public Node<T> find(T key) {
         Node<T> curNode = root;
-        int childNumber;
         while (true) {
-            if ((childNumber = curNode.findItem(key)) != -1)
-                return childNumber;//узел найден
+            if ((curNode.findItem(key)) != -1)
+                return curNode;//узел найден
             else if (curNode.isLeaf())
-                return -1; //узел не найден
+                return null; //узел не найден
             else//искать глубже
                 curNode = getNextChild(curNode, key);
         }
@@ -69,6 +72,9 @@ public class Tree234<T extends Comparable<T>> implements Collection<T> {//Объ
     public void insert(T dValue) {//Вставка элемента данных
         Node<T> curNode = root;
         DataItem<T> tempItem = new DataItem<T>(dValue);
+        if (min.getItem(0).dData.compareTo(dValue)<0) {
+            min =
+        }
         while (true) {
             if (curNode.isFull()) //если узел полон
             {
@@ -88,73 +94,130 @@ public class Tree234<T extends Comparable<T>> implements Collection<T> {//Объ
     }
 
 
-    private void recDisplayTree(Node<T> thisNode, int level, int childNumber) {
-        System.out.print("level=" + level + "; child=" + childNumber + " ");
-        thisNode.displayNode();
+    private void recDisplayTree(StringBuilder sb, Node<T> thisNode, int level, int childNumber) {
+        sb.append("level=").append(level).append("; child=").append(childNumber).append(" ");
+        sb.append(thisNode);
+
         //Вызов для каждого потомка текущего узла (присутствует рекурсия)
         int numItems = thisNode.getNumItems();
         for (int j = 0; j < numItems + 1; j++) {
             Node<T> nextNode = thisNode.getChild(j);
             if (nextNode != null)
-                recDisplayTree(nextNode, level + 1, j);
+                recDisplayTree(sb, nextNode, level + 1, j);
             else
                 return;
         }
+    }
 
+    private Node<T> findMin() {
+        if (!this.isEmpty()) {
+            Node<T> currentNode = root;
+            while (currentNode.getChild(0) != null)
+                currentNode = currentNode.getChild(0);
+            return currentNode;
+        }
+        else
+            return null;
+    }
+
+    private Node<T> findMax() {
+        if (!this.isEmpty()) {
+            Node<T> currentNode = root;
+            while ((currentNode.getChild(currentNode.getNumItems() + 1)) != null) {
+                currentNode = currentNode.getChild(currentNode.getNumItems() + 1);
+            }
+            return currentNode;
+        }
+        else
+            return null;
     }
 
 
     public void displayTree() {
-        recDisplayTree(root, 0, 0);
+        StringBuilder sb = new StringBuilder();
+        recDisplayTree(sb, root, 0, 0);
+        System.out.println(sb);
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        recDisplayTree(sb, root, 0, 0);
+        return sb.toString();
     }
 
 
-    @Override
     public int size() {
         return size;
     }
 
-    @Override
+
     public boolean isEmpty() {
         return size == 0;
     }
 
-    @Override
+
     public boolean contains(Object o) {
         try {
-            return find((T) o) != -1;
+            return find((T) o) != null;
         } catch (ClassCastException exception) {
             return false;
         }
     }
 
-    @Override
+    class TreeIterator implements Iterator<T> {
+        private Node<T> currentNode;
+        private DataItem<T> currentItem;
+        public TreeIterator() {
+            currentNode = findMin();
+            currentItem = findMin().getItem(0);
+        }
+        public boolean hasNext() {
+            return currentNode != findMax();
+        }
+
+        public T next() {
+            DataItem<T> tempItem;
+            while (true) {
+                if(currentNode.isLeaf()) {
+                    if(currentNode.findItem(currentItem)!=currentNode.getNumItems()) {
+                        tempItem = currentItem;
+                        currentItem = currentNode.getItem(currentNode.findItem(currentItem)+1);
+                        return tempItem.dData;
+                    }
+                    else {
+                       currentNode = currentNode.getParent();
+
+                    }
+                }
+
+            }
+        }
+    }
     public Iterator<T> iterator() {
-        return null;
+        return new TreeIterator();
     }
 
-    @Override
     public Object[] toArray() {
         return new Object[0];
     }
 
-    @Override
+
     public <T1> T1[] toArray(T1[] a) {
         return null;
     }
 
-    @Override
+
     public boolean add(T t) {
         insert(t);
         return true;
     }
 
-    @Override
+
     public boolean remove(Object o) {
         return false;
     }
 
-    @Override
+
     public boolean containsAll(Collection<?> c) {
         Iterator iterator = c.iterator();
         while (iterator.hasNext()) {
@@ -164,7 +227,6 @@ public class Tree234<T extends Comparable<T>> implements Collection<T> {//Объ
         return true;
     }
 
-    @Override
     public boolean addAll(Collection<? extends T> c) {
         Iterator iterator = c.iterator();
         while (iterator.hasNext()) {
@@ -177,17 +239,16 @@ public class Tree234<T extends Comparable<T>> implements Collection<T> {//Объ
         return true;
     }
 
-    @Override
+
     public boolean removeAll(Collection<?> c) {
         return false;
     }
 
-    @Override
+
     public boolean retainAll(Collection<?> c) {
         return false;
     }
 
-    @Override
     public void clear() {
 
     }
