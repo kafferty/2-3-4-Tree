@@ -72,9 +72,6 @@ public class Tree234<T extends Comparable<T>> implements Collection<T>,Iterable<
     public void insert(T dValue) {//Вставка элемента данных
         Node<T> curNode = root;
         DataItem<T> tempItem = new DataItem<T>(dValue);
-        if (min.getItem(0).dData.compareTo(dValue)<0) {
-            min =
-        }
         while (true) {
             if (curNode.isFull()) //если узел полон
             {
@@ -91,6 +88,20 @@ public class Tree234<T extends Comparable<T>> implements Collection<T>,Iterable<
 
         curNode.insertItem(tempItem);//Вставка нового элемента DataItem<T>
         size++;
+    }
+
+    public void remove (T dValue) {//Удаление элемента данных
+        Node<T> nodeToDelete = find(dValue);
+        Node<T> tempNode;
+        Node<T> currentNode;
+        if(!nodeToDelete.isLeaf()) {
+            tempNode = nodeToDelete;
+            currentNode = nodeToDelete.getChild(nodeToDelete.findItem(dValue)+1);
+            while (!currentNode.isLeaf()) {
+                currentNode = currentNode.getChild(0);
+                if (currentNode.getNumItems()==2)
+            }
+        }
     }
 
 
@@ -167,6 +178,9 @@ public class Tree234<T extends Comparable<T>> implements Collection<T>,Iterable<
     class TreeIterator implements Iterator<T> {
         private Node<T> currentNode;
         private DataItem<T> currentItem;
+        private boolean detect = false;
+        private Node<T> followingNode;
+        private DataItem<T> followingItem;
         public TreeIterator() {
             currentNode = findMin();
             currentItem = findMin().getItem(0);
@@ -177,20 +191,52 @@ public class Tree234<T extends Comparable<T>> implements Collection<T>,Iterable<
 
         public T next() {
             DataItem<T> tempItem;
-            while (true) {
-                if(currentNode.isLeaf()) {
-                    if(currentNode.findItem(currentItem)!=currentNode.getNumItems()) {
-                        tempItem = currentItem;
-                        currentItem = currentNode.getItem(currentNode.findItem(currentItem)+1);
-                        return tempItem.dData;
-                    }
-                    else {
-                       currentNode = currentNode.getParent();
-
-                    }
-                }
-
+//           /*while (true) {
+//
+//                if(currentNode.isLeaf()) {
+//                    if (currentNode.findItem(currentItem) != currentNode.getNumItems()) {
+//                        tempItem = currentItem;
+//                        currentItem = currentNode.getItem(currentNode.findItem(currentItem) + 1);
+//                        return tempItem.dData;
+//                    } else {
+//                        if (currentNode.getParent().getChild(currentNode.getParent().getNumItems() + 1) != currentNode) {
+//                            int i = 0;
+//                            Node<T> tempNode = currentNode;
+//                            currentNode = currentNode.getParent();
+//                            while (currentNode.getChild(i) != tempNode) {
+//                                i++;
+//                            }
+//                            currentItem = currentNode.getItem(i);
+//                        }
+//                        else {
+//                            currentNode = currentNode.getParent().getParent();
+//                        }
+//                    }
+//                }
+//            }*/
+            tempItem = currentItem;
+            if(!currentNode.isLeaf())
+                currentNode = currentNode.getChild(currentNode.findItem(currentItem.dData) + 1);
+            while(!currentNode.isLeaf()) {
+                currentNode = currentNode.getChild(0);
+                currentItem = currentNode.getItem(0);
             }
+            followingItem = currentItem;
+            if(currentItem != currentNode.getItem(currentNode.getNumItems()))
+                currentItem = currentNode.getItem(currentNode.findItem(currentItem)+1);
+            else {
+                Node<T> tempNode = currentNode;
+                currentNode = currentNode.getParent();
+                int i = 0;
+                while(currentNode.getChild(i) != tempNode)
+                    i++;
+                currentItem = currentNode.getItem(i);
+                followingItem = currentItem;
+                followingNode = currentNode;
+            }
+            return tempItem.dData;
+
+
         }
     }
     public Iterator<T> iterator() {

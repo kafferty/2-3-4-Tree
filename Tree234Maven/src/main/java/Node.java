@@ -85,11 +85,6 @@ public class Node<T extends Comparable<T>>{
         return temp;//Возвращаем удаленный элемент
     }
 
-    public void displayNode() {
-        for (int j=0; j<numItems; j++)
-            items.get(j).displayItem();
-        System.out.println("/");
-    }
 
     @Override
     public String toString() {
