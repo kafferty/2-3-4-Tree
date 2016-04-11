@@ -51,8 +51,9 @@ public class Node<T extends Comparable<T>>{
         for (int j = 0; j < ORDER - 1; j++) {
             if (items.get(j) == null)
                 break;
-            else if (items.get(j).dData.equals(key))
-                return j;
+            else
+                if (items.get(j).dData.equals(key))
+                    return j;
         }
         return -1;
     }
@@ -91,7 +92,7 @@ public class Node<T extends Comparable<T>>{
         StringBuilder sb = new StringBuilder();
         for (int j=0; j<numItems; j++)
             sb.append(items.get(j));
-        sb.append("/\n");
+        sb.append("/");
         return sb.toString();
     }
 }
