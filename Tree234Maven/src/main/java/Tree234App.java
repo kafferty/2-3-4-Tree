@@ -22,12 +22,17 @@ public class Tree234App {
         Iterator iter =  theTree.iterator();
         while(true) {
             System.out.println("Enter first letter of ");
-            System.out.println("show, insert, next element, height or find");
+            System.out.println("show, insert, remove, next element, height or find");
             char choice = getChar();
             switch(choice)
             {
                 case 's':
                     theTree.displayTree();
+                    break;
+                case 'r':
+                    System.out.print("Enter value to remove: ");
+                    value  = getString();
+                    theTree = theTree.remove(value);
                     break;
                 case 'i':
                     System.out.print("Enter value to insert: ");

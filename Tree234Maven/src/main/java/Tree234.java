@@ -1,5 +1,6 @@
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Stack;
 
 public class Tree234<T extends Comparable<T>> implements Collection<T>{//Объект класса представляет все дерево. Три основных метода: удаление, вставка и поиск.
 
@@ -103,8 +104,23 @@ public class Tree234<T extends Comparable<T>> implements Collection<T>{//Объ�
                 if (currentNode.getNumItems()==2);
             }
         }
+    } */
+
+    public Tree234<T> remove(T dValue) {
+        Iterator iter =  this.iterator();
+        Tree234 <T> newTree = new Tree234<T>();
+        while (iter.hasNext()) {
+            T item = (T)iter.next();
+            if (!item.equals(dValue)) {
+                newTree.insert(item);
+            }
+        }
+        if (!(findMin().getItem(0).dData.equals(dValue)))
+            newTree.insert(findMin().getItem(0).dData);
+        return newTree;
     }
-    */
+
+
 
     public int height() {
         int i = 1;
