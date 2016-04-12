@@ -8,11 +8,21 @@ public class Tree234App {
     public static void main(String[] args) throws IOException {
         String value;
         Tree234<String> theTree = new Tree234<String>();
-        theTree.insert("test");
+        theTree.insert("a");
+        theTree.insert("b");
+        theTree.insert("c");
+        theTree.insert("d");
+        theTree.insert("e");
+        theTree.insert("f");
+        theTree.insert("g");
+        theTree.insert("h");
+        theTree.insert("i");
+        theTree.insert("j");
+        theTree.insert("k");
         Iterator iter =  theTree.iterator();
         while(true) {
             System.out.println("Enter first letter of ");
-            System.out.println("show, insert, next or find");
+            System.out.println("show, insert, next element, height or find");
             char choice = getChar();
             switch(choice)
             {
@@ -31,12 +41,14 @@ public class Tree234App {
                     }
                     break;
                 case 'n':
-                    if (iter.hasNext()) {
+                    if (iter.hasNext())
                         System.out.println(iter.next());
+                   else {
+                        System.out.println("This is the end...");
                     }
-                    else {
-                        System.out.println("This is the end.. ");
-                    }
+                    break;
+                case 'h':
+                    System.out.println(theTree.height()+ " levels");
                     break;
                 case 'f':
                     System.out.print("Enter value to find: ");

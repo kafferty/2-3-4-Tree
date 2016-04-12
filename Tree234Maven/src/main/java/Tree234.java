@@ -106,6 +106,18 @@ public class Tree234<T extends Comparable<T>> implements Collection<T>{//Объ�
     }
     */
 
+    public int height() {
+        int i = 1;
+        if (!this.isEmpty()) {
+            Node<T> currentNode = root;
+            while (currentNode.getChild(0) != null) {
+                currentNode = currentNode.getChild(0);
+                i++;
+            }
+        }
+        return i;
+    }
+
 
     private void recDisplayTree(StringBuilder sb, Node<T> thisNode, int level, int childNumber) {
         sb.append("level=").append(level).append("; child=").append(childNumber).append(" ");
@@ -187,6 +199,9 @@ public class Tree234<T extends Comparable<T>> implements Collection<T>{//Объ�
             currentNode = findMin();
             currentItem = findMin().getItem(0);
         }
+        public DataItem<T> getCurrentItem() {
+            return currentItem;
+        }
 
         public boolean hasNext() {
             if (currentItem == findMax().getItem(findMax().getNumItems()-1)){
@@ -203,24 +218,36 @@ public class Tree234<T extends Comparable<T>> implements Collection<T>{//Объ�
 
                 while (!currentNode.isLeaf()) {
                     currentNode = currentNode.getChild(iItem);
+                    iItem = 0;
                 }
                 currentItem = currentNode.getItem(iItem);
                 return currentItem.dData;
             }
             else {
                 if (!currentNode.isLeaf()) {
-                currentNode = currentNode.getChild(iItem);
+                    currentNode = currentNode.getChild(iItem);
                     while(!currentNode.isLeaf()) {
-                        currentNode = currentNode.getChild(iItem);
+                        currentNode = currentNode.getChild(0);
                     }
                     currentItem = currentNode.getItem(0);
                 }
                 else {
-                    currentNode = currentNode.getParent();
-                    while (currentNode.getNumItems()>iItem) {
-                        currentNode = currentNode.getParent();
+                    //currentNode = currentNode.getParent();
+                    //while (currentNode.getNumItems()>iItem) {
+                      //  currentNode = currentNode.getParent();
+                    //}
+                    Node<T> parent = currentNode.getParent();
+                    while (haveElement(currentItem, parent)==false) {
+                        parent = parent.getParent();
                     }
-                    currentItem = currentNode.getItem(iItem-1);
+                    for (int i = 0; i<parent.getNumItems(); i++) {
+                        if (currentItem.dData.compareTo(parent.getItem(i).dData)<0) {
+                            currentItem = parent.getItem(i);
+                            currentNode = parent;
+                            break;
+                        }
+                    }
+                   // currentItem = currentNode.getItem(iItem-1);
                 }
                 return currentItem.dData;
             }
@@ -230,6 +257,16 @@ public class Tree234<T extends Comparable<T>> implements Collection<T>{//Объ�
             throw new UnsupportedOperationException("remove");
         }
 
+    }
+
+    private boolean haveElement(DataItem<T> item, Node<T> parent) {
+        for (int i = 0; i<parent.getNumItems(); i++) {
+            if (item.dData.compareTo(parent.getItem(i).dData)<0) {
+                item = parent.getItem(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     public Iterator<T> iterator() {

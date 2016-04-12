@@ -28,7 +28,7 @@ public class Tree234Test extends TestCase {
         Tree234<String> tree = new Tree234<String>();
         tree.insert("test");
         tree.insert("test");
-        String actual = new String ("level=0; child=0 /test/");
+        String actual = new String ("level=0; child=0 /test/\n");
         assertEquals(tree.toString(), actual);
     }
 }

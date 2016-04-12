@@ -92,7 +92,7 @@ public class Node<T extends Comparable<T>>{
         StringBuilder sb = new StringBuilder();
         for (int j=0; j<numItems; j++)
             sb.append(items.get(j));
-        sb.append("/");
+        sb.append("/\n");
         return sb.toString();
     }
 }
