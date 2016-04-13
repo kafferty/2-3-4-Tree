@@ -1,11 +1,10 @@
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Stack;
 
 public class Tree234<T extends Comparable<T>> implements Collection<T>{//Объект класса представляет все дерево. Три основных метода: удаление, вставка и поиск.
 
-    private Node<T> root = new Node<T>();//создание корневого узла
-    private int size = 0;
+        private Node<T> root = new Node<T>();//создание корневого узла
+        private int size = 0;
 
     public void split(Node<T> thisNode) //Разбиение узла
     {
@@ -92,19 +91,6 @@ public class Tree234<T extends Comparable<T>> implements Collection<T>{//Объ�
             return;
     }
 
-   /* public void remove (T dValue) {//Удаление элемента данных
-        Node<T> nodeToDelete = find(dValue);
-        Node<T> tempNode;
-        Node<T> currentNode;
-        if(!nodeToDelete.isLeaf()) {
-            tempNode = nodeToDelete;
-            currentNode = nodeToDelete.getChild(nodeToDelete.findItem(dValue)+1);
-            while (!currentNode.isLeaf()) {
-                currentNode = currentNode.getChild(0);
-                if (currentNode.getNumItems()==2);
-            }
-        }
-    } */
 
     public Tree234<T> remove(T dValue) {
         Iterator iter =  this.iterator();
@@ -212,24 +198,27 @@ public class Tree234<T extends Comparable<T>> implements Collection<T>{//Объ�
         private DataItem<T> currentItem;
 
         public TreeIterator() {
-            currentNode = findMin();
-            currentItem = findMin().getItem(0);
-        }
-        public DataItem<T> getCurrentItem() {
-            return currentItem;
+            currentNode = null;
+            currentItem = null;
         }
 
         public boolean hasNext() {
-            if (currentItem == findMax().getItem(findMax().getNumItems()-1)){
+            if (isEmpty()) {
+                return false;
+            }
+            if (findMax().getItem(findMax().getNumItems()-1).equals(currentItem)  ){
                 return false;
             }
             return true;
         }
 
         public T next() {
-            StringBuffer str = new StringBuffer();
-            str.append(currentItem);
-            int iItem = currentNode.findItem(str.deleteCharAt(0).toString())+1;
+            if (currentItem == null) {
+                currentNode = findMin();
+                currentItem = findMin().getItem(0);
+                return currentItem.dData;
+            }
+            int iItem = currentNode.findItem(currentItem.dData) + 1;
             if (iItem+1<=currentNode.getNumItems()) {
 
                 while (!currentNode.isLeaf()) {
@@ -248,10 +237,6 @@ public class Tree234<T extends Comparable<T>> implements Collection<T>{//Объ�
                     currentItem = currentNode.getItem(0);
                 }
                 else {
-                    //currentNode = currentNode.getParent();
-                    //while (currentNode.getNumItems()>iItem) {
-                      //  currentNode = currentNode.getParent();
-                    //}
                     Node<T> parent = currentNode.getParent();
                     while (haveElement(currentItem, parent)==false) {
                         parent = parent.getParent();
@@ -263,7 +248,6 @@ public class Tree234<T extends Comparable<T>> implements Collection<T>{//Объ�
                             break;
                         }
                     }
-                   // currentItem = currentNode.getItem(iItem-1);
                 }
                 return currentItem.dData;
             }

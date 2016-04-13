@@ -8,17 +8,18 @@ public class Tree234App {
     public static void main(String[] args) throws IOException {
         String value;
         Tree234<String> theTree = new Tree234<String>();
-        theTree.insert("a");
-        theTree.insert("b");
-        theTree.insert("c");
-        theTree.insert("d");
-        theTree.insert("e");
-        theTree.insert("f");
+       /* theTree.insert("f");
         theTree.insert("g");
         theTree.insert("h");
         theTree.insert("i");
         theTree.insert("j");
         theTree.insert("k");
+        theTree.insert("a");
+        theTree.insert("b");
+        theTree.insert("c");
+        theTree.insert("d");
+        theTree.insert("e"); */
+
         Iterator iter =  theTree.iterator();
         while(true) {
             System.out.println("Enter first letter of ");

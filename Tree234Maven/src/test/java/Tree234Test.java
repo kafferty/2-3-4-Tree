@@ -63,4 +63,11 @@ public class Tree234Test extends TestCase {
         Iterator iter =  tree.iterator();
         assertEquals(iter.next(), "for");
     }
+
+    @Test
+    public void testHasNextEmpty() throws Exception {
+        Tree234<String> tree = new Tree234<String>();
+        Iterator iter = tree.iterator();
+        assertFalse(iter.hasNext());
+    }
 }
